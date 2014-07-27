@@ -61,7 +61,7 @@ class MausamApp(Tkinter.Tk):
 		
 		titleFrame = Tkinter.Frame(self.frameIn, bg="black", height=self.y_in, width=x_in_left)
 		titleFrame.place(anchor="w", rely=0.5)
-		title = Tkinter.Label(titleFrame, text="MAUSAM", fg="Lime", bg="black", font=("Helvetica", 60, "bold italic"), wraplength=30)
+		title = Tkinter.Label(titleFrame, text="MAUSAM", fg="Green", bg="black", font=("Helvetica", 60, "bold italic"), wraplength=30)
 		title.place(anchor="center", relx=0.5, rely=0.5)
 		self.panel = Tkinter.Frame(self.frameIn, bg="white", height=self.y_in, width=self.x_in_right)
 		self.panel.place(anchor="e", rely=0.5, relx=1)
@@ -158,7 +158,7 @@ class MausamApp(Tkinter.Tk):
 		x = 2*self.x_in_right/3
 		y = self.y_in/2
 		self.dateTimeFrame = Tkinter.Frame(self.gridTwo, bg="RosyBrown", height=y, width=x/2)
-		self.dateTimeFrame.place(anchor="n", relx=0.71)
+		self.dateTimeFrame.place(anchor="ne", relx=0.96)
 		dateTimeFrameInner = Tkinter.Frame(self.dateTimeFrame, bg="white", height=y-30, width=(x/2)-30)
 		dateTimeFrameInner.place(anchor="center", rely=0.5, relx=0.5)	
 		self.setTime()
