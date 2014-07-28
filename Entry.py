@@ -26,6 +26,7 @@ class MausamApp(Tkinter.Tk):
 		self.update()
 
 	def initVariables(self):
+		self.monthToStr = {1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"June", 7:"July", 8:"Aug", 9:"Sept", 10:"Oct", 11:"Nov", 12:"Dec"}
 		self.temp = Tkinter.StringVar()
 		self.tempDesc = Tkinter.StringVar()
 		self.windSpeed = Tkinter.StringVar()
@@ -33,11 +34,14 @@ class MausamApp(Tkinter.Tk):
 		self.precipitation = Tkinter.StringVar()
 		self.pressure = Tkinter.StringVar()
 		self.visibility = Tkinter.StringVar()
+		self.timeStr = Tkinter.StringVar()
+		self.dateStr = Tkinter.StringVar()
 		self.setWeather()
-		self.monthToStr = {1:"Jan", 2:"Feb", 3:"Mar", 4:"Apr", 5:"May", 6:"June", 7:"July", 8:"Aug", 9:"Sept", 10:"Oct", 11:"Nov", 12:"Dec"}
 
 	def setWeather(self):
 		data = WeatherData()
+		date = datetime.today().date()
+		time = datetime.today().time()
 		self.temp.set(data.temp)
 		self.tempDesc.set(data.tempDesc)
 		self.imgLoc = data.icon
@@ -46,6 +50,8 @@ class MausamApp(Tkinter.Tk):
 		self.precipitation.set(data.precipitation)
 		self.pressure.set(data.pressure)
 		self.visibility.set(data.visibility)
+		self.dateStr.set(self.monthToStr[date.month] + " " + str(date.day))
+		self.timeStr.set(time.strftime("%I:%M %p"))
 
 	def setLayout(self):
 		x_out = self.winfo_screenwidth()
@@ -169,10 +175,7 @@ class MausamApp(Tkinter.Tk):
 	Sets it on the GUI
 	"""
 	def setDate(self):
-		date = datetime.today().date()
-		dateStr = Tkinter.StringVar()
-		dateStr.set(self.monthToStr[date.month] + " " + str(date.day))
-		dateLabel = Tkinter.Label(self.dateTimeFrame, textvariable=dateStr, fg="black", bg="white", font=("Arial", 25, "bold"))
+		dateLabel = Tkinter.Label(self.dateTimeFrame, textvariable=self.dateStr, fg="black", bg="white", font=("Arial", 25, "bold"))
 		dateLabel.place(anchor="center", relx=0.5, rely=0.7)
 
 	"""
@@ -180,10 +183,7 @@ class MausamApp(Tkinter.Tk):
 	Sets it on the GUI
 	"""
 	def setTime(self):
-		time = datetime.today().time()
-		timeStr = Tkinter.StringVar()
-		timeStr.set(time.strftime("%I:%M %p"))
-		timeLabel = Tkinter.Label(self.dateTimeFrame, textvariable=timeStr, fg="black", bg="white", font=("Arial", 50, "bold"))
+		timeLabel = Tkinter.Label(self.dateTimeFrame, textvariable=self.timeStr, fg="black", bg="white", font=("Arial", 50, "bold"))
 		timeLabel.place(anchor="center", relx=0.5, rely=0.4)
 
 	"""
@@ -200,18 +200,12 @@ class MausamApp(Tkinter.Tk):
 		message.place(anchor="w", rely=0.5)
 
 	"""
-	Add callback methods to update the time every 1 minute, date every 1 day and temperature data every 1 hour
-	1 min == 60000 ms
-	1 hour == 3600000 ms
-	1 day == 86400000
+	Add callback methods to update real-time data every 30 seconds
 	"""
 	def update(self):
-		ms_min = 60000
-		ms_hour = 3600000
-		ms_day = 86400000
-		self.after(ms_min, self.setTime)
-		self.after(ms_hour, self.setWeather)
-		self.after(ms_day, self.setDate)
+		self.setWeather()
+		ms_min = 30000
+		self.after(ms_min, self.update)
 
 if __name__ == "__main__":
 	app = MausamApp(None)
